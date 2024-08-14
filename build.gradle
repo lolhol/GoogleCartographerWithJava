@@ -1,0 +1,23 @@
+plugins {
+    id 'java'
+}
+
+group = 'org.brigero'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation(files('libs/UnitreeLidar4Java.jar'))
+    implementation(files('libs/RPLidar4J-1.0.0.jar'))
+    implementation(files('libs/Cartographer4Java3D.jar'))
+
+    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+}
+
+test {
+    useJUnitPlatform()
+}
