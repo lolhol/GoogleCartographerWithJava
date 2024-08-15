@@ -12,7 +12,7 @@ public class UnitreeLidarRecorder extends UnitreeLidar4Java {
     public UnitreeLidarRecorder(String fileName) throws IOException {
         super();
         this._K_FILE_NAME = fileName;
-        this._K_FILE_WRITER = new FileWriter(fileName);
+        this._K_FILE_WRITER = new FileWriter(_K_FILE_NAME);
     }
 
     public void writeData(MessageType message) throws IOException {

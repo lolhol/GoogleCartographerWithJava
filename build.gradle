@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'application'
 }
 
 group = 'org.brigero'
@@ -20,4 +21,14 @@ dependencies {
 
 test {
     useJUnitPlatform()
+}
+
+task runSpecificCase(type: JavaExec) {
+    group = 'application'
+    description = 'Runs the application with a specific case configuration'
+
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'org.brigero.UnitreeLidarRecordData'
+
+    args '-f', '123', '-lp', "abc"
 }
