@@ -64,7 +64,7 @@ public class UnitreeLidarReadingData extends Thread {
     }
 
     private void handleIMU() throws IOException {
-        int stamp = _K_FILE_READER.readInt();
+        double stamp = _K_FILE_READER.readDouble();
         double[] angular_velocity = new double[3];
         for (int i = 0; i < 3; i++) {
             angular_velocity[i] = _K_FILE_READER.readDouble();
