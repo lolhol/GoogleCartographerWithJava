@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'application'
+    id 'org.openjfx.javafxplugin' version '0.0.13' // JavaFX plugin for Gradle
 }
 
 group = 'org.brigero'
@@ -10,32 +11,48 @@ repositories {
     mavenCentral()
 }
 
-dependencies {
-    implementation(files('libs/UnitreeLidar4Java.jar'))
-    implementation(files('libs/RPLidar4J-1.0.0.jar'))
-    implementation(files('libs/Cartographer4Java3D.jar'))
+javafx {
+    version = "17.0.2"
+    modules = [ 'javafx.controls', 'javafx.fxml' ]
+}
 
+dependencies {
+    // Local JAR dependencies
+    implementation files('libs/UnitreeLidar4Java.jar')
+    implementation files('libs/RPLidar4J-1.0.0.jar')
+    implementation files('libs/Cartographer4Java3D.jar')
+
+    // JUnit for testing
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
+}
+
+tasks.register('runApp', JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'org.brigero.render.app.AppRenderer'
+    applicationDefaultJvmArgs = [
+            '--module-path', "${System.getProperty('java.home')}/lib/javafx-sdk-17.0.2/lib",
+            '--add-modules', 'javafx.controls,javafx.fxml'
+    ]
 }
 
 test {
     useJUnitPlatform()
 }
 
-task runLidarRecorder(type: JavaExec) {
+tasks.register('runLidarRecorder', JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
     mainClass = 'org.brigero.recording.UnitreeLidarRecordData'
     args = project.findProperty("args")?.split(" ") ?: []
 }
 
-task runLidarLoader(type: JavaExec) {
+tasks.register('runLidarLoader', JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
     mainClass = 'org.brigero.loading.UnitreeLidarReadData'
     args = project.findProperty("args")?.split(" ") ?: []
 }
 
-task runCarto3D(type: JavaExec) {
+tasks.register('runCarto3D', JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
     mainClass = 'org.brigero.cartographer.RunGoogleCartographer3D'
     args = project.findProperty("args")?.split(" ") ?: []
