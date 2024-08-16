@@ -1,4 +1,4 @@
-package org.brigero.loading.util;
+ package org.brigero.loading.util;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -52,12 +52,12 @@ public class UnitreeLidarReadingData extends Thread {
     private void handlePointCloud() throws IOException {
         double stamp = _K_FILE_READER.readDouble();
         int len = _K_FILE_READER.readInt();
-        double[][] points = new double[len][3];
+        float[][] points = new float[len][3];
         for (int i = 0; i < len; i++) {
-            points[i] = new double[] {
-                    _K_FILE_READER.readDouble(),
-                    _K_FILE_READER.readDouble(),
-                    _K_FILE_READER.readDouble()
+            points[i] = new float[] {
+                    (float) _K_FILE_READER.readDouble(),
+                    (float) _K_FILE_READER.readDouble(),
+                    (float) _K_FILE_READER.readDouble()
             };
         }
 
@@ -66,17 +66,17 @@ public class UnitreeLidarReadingData extends Thread {
 
     private void handleIMU() throws IOException {
         double stamp = _K_FILE_READER.readDouble();
-        double[] angular_velocity = new double[3];
+        float[] angular_velocity = new float[3];
         for (int i = 0; i < 3; i++) {
-            angular_velocity[i] = _K_FILE_READER.readDouble();
+            angular_velocity[i] = (float) _K_FILE_READER.readDouble();
         }
-        double[] linear_acceleration = new double[3];
+        float[] linear_acceleration = new float[3];
         for (int i = 0; i < 3; i++) {
-            linear_acceleration[i] = _K_FILE_READER.readDouble();
+            linear_acceleration[i] = (float) _K_FILE_READER.readDouble();
         }
-        double[] quaternion = new double[4];
+        float[] quaternion = new float[4];
         for (int i = 0; i < 4; i++) {
-            quaternion[i] = _K_FILE_READER.readDouble();
+            quaternion[i] = (float) _K_FILE_READER.readDouble();
         }
 
         _K_CALLBACK.onIMUData(angular_velocity, linear_acceleration, quaternion, stamp);
