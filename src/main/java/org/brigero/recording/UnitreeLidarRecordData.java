@@ -1,8 +1,7 @@
-package org.brigero;
+package org.brigero.recording;
 
 //import brigero.UnitreeLidar4Java;
 import brigero.UnitreeLidar4Java;
-import org.brigero.recording.UnitreeLidarRecorder;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -34,7 +33,7 @@ public class UnitreeLidarRecordData {
             return;
         }
 
-        UnitreeLidarRecorder unitreeLidarInstance = new UnitreeLidarRecorder(fileName);
+        UnitreeLidarRecorder unitreeLidarInstance = new UnitreeLidarRecorder(fileName, lidarPath);
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             isRunning = false;
@@ -42,8 +41,6 @@ public class UnitreeLidarRecordData {
         }));
 
         unitreeLidarInstance.setState(UnitreeLidar4Java.UnitreeLidar4JavaStates.NORMAL);
-
-        unitreeLidarInstance.init(lidarPath);
 
         while (isRunning) {
             unitreeLidarInstance.writeData(unitreeLidarInstance.getCurMessageEnum());

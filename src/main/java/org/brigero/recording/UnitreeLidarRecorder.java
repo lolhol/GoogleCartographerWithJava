@@ -2,57 +2,49 @@ package org.brigero.recording;
 
 import brigero.UnitreeLidar4Java;
 
-import java.io.FileWriter;
+import java.io.DataOutputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public class UnitreeLidarRecorder extends UnitreeLidar4Java {
     private final String _K_FILE_NAME;
-    private final FileWriter _K_FILE_WRITER;
+    private final DataOutputStream _K_FILE_WRITER;
 
-    public UnitreeLidarRecorder(String fileName) throws IOException {
+    public UnitreeLidarRecorder(String fileName, String lidarPath) throws IOException {
         super();
         this._K_FILE_NAME = fileName;
-        this._K_FILE_WRITER = new FileWriter(_K_FILE_NAME);
+        this._K_FILE_WRITER = new DataOutputStream(Files.newOutputStream(Paths.get(_K_FILE_NAME)));
+        this.init(lidarPath);
     }
 
     public void writeData(MessageType message) throws IOException {
         switch (message) {
             case POINTCLOUD:
-                this._K_FILE_WRITER.append("POINTCLOUD ");
+                _K_FILE_WRITER.writeUTF("POINTCLOUD");
                 PointCloud cloud = (PointCloud) this.getPointCloudObject();
-                this._K_FILE_WRITER.append((char) cloud.stamp);
+                _K_FILE_WRITER.writeDouble(cloud.stamp);
+                _K_FILE_WRITER.writeInt(cloud.point.length);
                 for (int i = 0; i < cloud.point.length; i++) {
-                    this._K_FILE_WRITER.append(" ");
-                    this._K_FILE_WRITER.append((char) cloud.point[i].x);
-                    this._K_FILE_WRITER.append(" ");
-                    this._K_FILE_WRITER.append((char) cloud.point[i].y);
-                    this._K_FILE_WRITER.append(" ");
-                    this._K_FILE_WRITER.append((char) cloud.point[i].z);
-
-                    if (i == cloud.point.length - 1) {
-                        this._K_FILE_WRITER.append(" ");
-                    }
+                    _K_FILE_WRITER.writeDouble(cloud.point[i].x);
+                    _K_FILE_WRITER.writeDouble(cloud.point[i].y);
+                    _K_FILE_WRITER.writeDouble(cloud.point[i].z);
                 }
                 break;
             case IMU:
-                this._K_FILE_WRITER.append("IMU ");
+                _K_FILE_WRITER.writeUTF("IMU");
                 IMUUnitree imu = this.getIMUData();
-                this._K_FILE_WRITER.append((char) imu.stamp);
+                _K_FILE_WRITER.writeDouble(imu.stamp);
                 for (int i = 0; i < imu.angular_velocity.length; i++) {
-                    this._K_FILE_WRITER.append(" ");
-                    this._K_FILE_WRITER.append((char) imu.angular_velocity[i]);
+                    _K_FILE_WRITER.writeDouble(imu.angular_velocity[i]);
                 }
-
                 for (int i = 0; i < imu.linear_acceleration.length; i++) {
-                    this._K_FILE_WRITER.append(" ");
-                    this._K_FILE_WRITER.append((char) imu.linear_acceleration[i]);
+                    _K_FILE_WRITER.writeDouble(imu.linear_acceleration[i]);
                 }
-
                 for (int i = 0; i < imu.quaternion.length; i++) {
-                    this._K_FILE_WRITER.append(" ");
-                    this._K_FILE_WRITER.append((char) imu.quaternion[i]);
+                    _K_FILE_WRITER.writeDouble(imu.quaternion[i]);
                 }
-                this._K_FILE_WRITER.append(" ");
                 break;
             default:
                 break;
