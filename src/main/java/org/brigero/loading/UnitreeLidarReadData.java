@@ -15,18 +15,20 @@ public class UnitreeLidarReadData {
         }
 
         System.out.println(Arrays.toString(args));
-        UnitreeLidarReadingData unitreeLidarReadingData = new UnitreeLidarReadingData(new File(args[0]), new OnUnreadabilityDataReceive() {
-            @Override
-            public void onPointCloudData(double[][] cloud, double timeStamp) {
-                System.out.println(cloud.length);
-            }
+        UnitreeLidarReadingData unitreeLidarReadingData = new UnitreeLidarReadingData(new File(args[0]),
+                new OnUnreadabilityDataReceive() {
+                    @Override
+                    public void onPointCloudData(float[][] cloud, double timeStamp) {
+                        System.out.println(cloud.length);
+                    }
 
-            @Override
-            public void onIMUData(double[] angular_velocity, double[] linear_acceleration, double[] quaternion, double timeStamp) {
-                System.out.println(angular_velocity.length);
-            }
-        },
-        Long.parseLong(args[1]));
+                    @Override
+                    public void onIMUData(float[] angular_velocity, float[] linear_acceleration, float[] quaternion,
+                            double timeStamp) {
+                        System.out.println(angular_velocity.length);
+                    }
+                },
+                Long.parseLong(args[1]));
 
         unitreeLidarReadingData.start();
     }
