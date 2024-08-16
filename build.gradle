@@ -23,12 +23,14 @@ test {
     useJUnitPlatform()
 }
 
-task runSpecificCase(type: JavaExec) {
-    group = 'application'
-    description = 'Runs the application with a specific case configuration'
-
+task runLidarRecorder(type: JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
-    mainClass = 'org.brigero.UnitreeLidarRecordData'
+    mainClass = 'org.brigero.recording.UnitreeLidarRecordData'
+    args = project.findProperty("args")?.split(" ") ?: []
+}
 
-    args '-f', '123', '-lp', "abc"
+task runLidarLoader(type: JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'org.brigero.loading.UnitreeLidarReadData'
+    args = project.findProperty("args")?.split(" ") ?: []
 }

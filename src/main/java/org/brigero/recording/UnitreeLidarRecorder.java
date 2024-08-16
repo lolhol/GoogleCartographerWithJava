@@ -1,5 +1,8 @@
 package org.brigero.recording;
 
+import brigero.IMUUnitree;
+import brigero.MessageType;
+import brigero.PointCloud;
 import brigero.UnitreeLidar4Java;
 
 import java.io.DataOutputStream;
@@ -16,7 +19,6 @@ public class UnitreeLidarRecorder extends UnitreeLidar4Java {
         super();
         this._K_FILE_NAME = fileName;
         this._K_FILE_WRITER = new DataOutputStream(Files.newOutputStream(Paths.get(_K_FILE_NAME)));
-        this.init(lidarPath);
     }
 
     public void writeData(MessageType message) throws IOException {

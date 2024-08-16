@@ -9,7 +9,8 @@ public class UnitreeLidarReadingData extends Thread {
     private final long _K_TIME_STEP;
     private boolean _isOnline = true;
 
-    public UnitreeLidarReadingData(File filePath, OnUnreadabilityDataReceive callback, long timestep) throws IOException {
+    public UnitreeLidarReadingData(File filePath, OnUnreadabilityDataReceive callback, long timestep)
+            throws IOException {
         this._K_FILE_READER = new DataInputStream(Files.newInputStream(filePath.toPath()));
         this._K_CALLBACK = callback;
         this._K_TIME_STEP = timestep;
@@ -54,9 +55,9 @@ public class UnitreeLidarReadingData extends Thread {
         double[][] points = new double[len][3];
         for (int i = 0; i < len; i++) {
             points[i] = new double[] {
-                _K_FILE_READER.readDouble(),
-                _K_FILE_READER.readDouble(),
-                _K_FILE_READER.readDouble()
+                    _K_FILE_READER.readDouble(),
+                    _K_FILE_READER.readDouble(),
+                    _K_FILE_READER.readDouble()
             };
         }
 
@@ -64,7 +65,7 @@ public class UnitreeLidarReadingData extends Thread {
     }
 
     private void handleIMU() throws IOException {
-        int stamp = _K_FILE_READER.readInt();
+        double stamp = _K_FILE_READER.readDouble();
         double[] angular_velocity = new double[3];
         for (int i = 0; i < 3; i++) {
             angular_velocity[i] = _K_FILE_READER.readDouble();
@@ -78,7 +79,7 @@ public class UnitreeLidarReadingData extends Thread {
             quaternion[i] = _K_FILE_READER.readDouble();
         }
 
-        _K_CALLBACK.onIMUData(quaternion, linear_acceleration, angular_velocity, stamp);
+        _K_CALLBACK.onIMUData(angular_velocity, linear_acceleration, quaternion, stamp);
     }
 
     public void setState(boolean newState) {
