@@ -34,3 +34,9 @@ task runLidarLoader(type: JavaExec) {
     mainClass = 'org.brigero.loading.UnitreeLidarReadData'
     args = project.findProperty("args")?.split(" ") ?: []
 }
+
+task runCarto3D(type: JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'org.brigero.cartographer.RunGoogleCartographer3D'
+    args = project.findProperty("args")?.split(" ") ?: []
+}
